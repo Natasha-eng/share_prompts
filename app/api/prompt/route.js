@@ -1,11 +1,10 @@
+export const dynamic = "force-dynamic";
+
 import { fatchAllPrompts } from "@lib/airtable";
-import { revalidatePath } from "next/cache";
 
 export const GET = async (request) => {
-  console.log(request.url);
   try {
     const prompts = await fatchAllPrompts();
-    revalidatePath("/");
     return new Response(JSON.stringify(prompts), {
       status: 200,
     });
