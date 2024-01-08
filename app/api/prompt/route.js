@@ -2,7 +2,7 @@ import { fatchAllPrompts } from "@lib/airtable";
 import { revalidatePath } from "next/cache";
 
 export const GET = async (request) => {
-  const data = request;
+  console.log(request.url);
   try {
     const prompts = await fatchAllPrompts();
     revalidatePath("/");
