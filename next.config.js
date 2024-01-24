@@ -2,18 +2,29 @@
 const nextConfig = {
   experimental: {
     // appDir: true,
-    serverMinification: false
+    // serverMinification: false,
   },
   images: {
-    domains: ["lh3.googleusercontent.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "utfs.io",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+      },
+    ],
   },
-  webpack(config) {
-    config.experiments = {
-      ...config.experiments,
-      topLevelAwait: true,
-    };
-    return config;
-  },
+  // webpack(config) {
+  //   config.experiments = {
+  //     ...config.experiments,
+  //     topLevelAwait: true,
+  //   };
+  //   return config;
+  // },
 };
 
 module.exports = nextConfig;

@@ -1,4 +1,6 @@
 import { deletePrompt, findPromptById, updatePrompt } from "@lib/airtable";
+import { revalidatePath } from "next/cache";
+import { NextResponse } from "next/server";
 
 export const GET = async (req, { params }) => {
   const id = params.id;
@@ -11,11 +13,11 @@ export const GET = async (req, { params }) => {
         status: 404,
       });
     }
+
     return new Response(JSON.stringify(prompt), {
       status: 200,
     });
   } catch (err) {
-    console.log(err);
     return new Response(err, {
       status: 500,
     });
@@ -27,8 +29,9 @@ export const PUT = async (request) => {
 
   try {
     const updatedPrompt = await updatePrompt(recordId, promptObj);
+
     if (updatedPrompt.recordId) {
-      return new Response(JSON.stringify(updatedPrompt), { status: 201 });
+      // return new Response(JSON.stringify(updatedPrompt), { status: 201 });
     } else {
       return new Response("Failed to update the prompt", {
         status: 404,
@@ -39,6 +42,8 @@ export const PUT = async (request) => {
       status: 500,
     });
   }
+  revalidatePath("/profile");
+  return NextResponse.redirect(new URL("/profile", request.url));
 };
 
 export const DELETE = async (request) => {

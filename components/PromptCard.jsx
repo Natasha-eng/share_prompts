@@ -4,22 +4,28 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const PromptCard = ({ post, handleEdit, handleDelete, setSearchText }) => {
+const PromptCard = ({
+  post,
+  handleEdit,
+  handleDelete,
+  setSearchText,
+  currentUser
+}) => {
   const [copied, setCopied] = useState("");
-  const [currentUser, setCurrentUser] = useState(null);
+  // const [currentUser, setCurrentUser] = useState(null);
 
   const pathName = usePathname();
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const currentUserData = await fetch("/api/isAuth");
-      const user = await currentUserData.json();
-      setCurrentUser(user);
-    };
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     const currentUserData = await fetch("/api/isAuth");
+  //     const user = await currentUserData.json();
+  //     setCurrentUser(user);
+  //   };
 
-    fetchUserData();
-  }, []);
+  //   fetchUserData();
+  // }, []);
 
   const handleTagClick = () => {
     setSearchText(post.tag);
@@ -36,7 +42,7 @@ const PromptCard = ({ post, handleEdit, handleDelete, setSearchText }) => {
     setCopied(post.prompt);
     //copy to the clipboard
     navigator.clipboard.writeText(post.prompt);
-    setTimeout(() => setCopied(""), 20000);
+    setTimeout(() => setCopied(""), 2000);
   };
   return (
     <div className="prompt_card">
@@ -45,6 +51,12 @@ const PromptCard = ({ post, handleEdit, handleDelete, setSearchText }) => {
           className="flex flex-col cursor-pointer"
           onClick={handleProfileClick}
         >
+          <Image
+            src={post.img || "/images/upload.svg"}
+            width={200}
+            height={200}
+            alt="event-img"
+          />
           <h3 className="font-satoshi font-semibold text-grey-900">
             {post.username}
           </h3>
