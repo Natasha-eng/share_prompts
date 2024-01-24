@@ -25,10 +25,10 @@ export const authConfig = {
         if (isLoggedIn) return true;
         return false;
       } else if (isLoggedIn) {
-        return Response.redirect(new URL("/profile", request.nextUrl));
+        return Response.redirect(new URL("/", request.nextUrl));
       } else if (isOnHome) {
         if (isLoggedIn) {
-          return Response.redirect(new URL("/profile", request.nextUrl));
+          return Response.redirect(new URL("/", request.nextUrl));
         } else {
           return false;
         }
