@@ -34,14 +34,12 @@ export const authConfig = {
       } else if (isOnUpdatePrompt) {
         if (isLoggedIn) return true;
         return false;
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL("/profile", request.nextUrl));
       } else if (isOnHome) {
         if (isLoggedIn) {
           return true;
-        } else {
-          return false;
         }
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/profile", request.nextUrl));
       }
       return true;
     },
