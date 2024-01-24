@@ -1,5 +1,3 @@
-import React from "react";
-
 const LoginForm = ({ user, setUser, submitting, handleSubmit }) => {
   return (
     <section className="w-full max-w-full flex-start flex-col">

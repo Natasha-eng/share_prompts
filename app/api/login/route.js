@@ -17,7 +17,9 @@ export const POST = async (request) => {
 
     if (!user) {
       const newUser = await createUser(username, hashedPassword);
-      const token = createToken(newUser.username, newUser.userId);
+
+      const token = await createToken(newUser.username, newUser.userId);
+
       cookies().set({
         name: "promptToken",
         value: token,
@@ -29,7 +31,6 @@ export const POST = async (request) => {
         JSON.stringify({ username: newUser.username, userId: newUser.userId }),
         {
           status: 200,
-          // headers: { "Set-Cookie": `promptToken=${token}` },
         }
       );
     } else {
@@ -46,7 +47,6 @@ export const POST = async (request) => {
         JSON.stringify({ username: user.username, userId: user.userId }),
         {
           status: 200,
-          // headers: { "Set-Cookie": `promptToken=${token}` },
         }
       );
     }

@@ -1,18 +1,20 @@
-import Profile from "@components/Profile";
-import { verifyToken } from "@lib/token";
+export const revalidate = 0;
 
-import { cookies } from "next/headers";
+import { auth } from "@app/auth";
+import Profile from "@components/Profile";
+import { findUser } from "@lib/actions";
 
 const MyProfile = async () => {
-  const cookieStore = cookies();
-  const userCookie = cookieStore.get("promptToken");
-  const user = await verifyToken(userCookie?.value);
+  const userData = await auth();
+  const username = userData?.user ? userData?.user.username : null;
+
+  const currentUser = username && (await findUser(username));
 
   return (
     <Profile
       name="My"
       desc="Welcome to your personalized profile page"
-      currentUser={user}
+      currentUser={currentUser}
     />
   );
 };

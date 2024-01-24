@@ -1,5 +1,6 @@
 import Nav from "@components/Nav";
 import "@styles/globals.css";
+import "@uploadthing/react/styles.css";
 
 export const metadata = {
   title: "Share Prompts",

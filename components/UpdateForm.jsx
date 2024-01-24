@@ -1,14 +1,58 @@
-import Link from "next/link";
+"use client";
 
-const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
+import Link from "next/link";
+import { FileUploader } from "./FileUploader";
+import { useUploadThing } from "@lib/uploadthing";
+import { useState } from "react";
+import { updatePrompt } from "@lib/actions";
+
+const UpdateForm = ({ type, promptDetails, promptId }) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [post, setPost] = useState({
+    recordId: promptDetails.recordId,
+    prompt: promptDetails.prompt,
+    tag: promptDetails.tag,
+    url: promptDetails.img,
+  });
+
+  let { startUpload } = useUploadThing("imageUploader");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setSubmitting(true);
+
+    if (!promptId) return alert("Prompt ID not found");
+    try {
+      let uploadImages = "";
+      if (files.length > 0) {
+        uploadImages = await startUpload(files);
+      }
+      let uploadedImageUrl = uploadImages[0]?.url;
+
+      const ojectToUpdate = {
+        prompt: post.prompt,
+        tag: post.tag,
+        img: uploadedImageUrl,
+      };
+
+      const updated = await updatePrompt(post.recordId, ojectToUpdate);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <section className="w-full max-w-full flex-start flex-col">
       <h1 className="head_text text-left">
         <span className="blue_gradient">{type} Post</span>
       </h1>
       <p className="desc text_left max-w-md">
-        {type} and share amazing prompts with the world, and let your
-        imagination run wild with any AI-powered plarform.
+        {type} and share amazing events with the world, and let your imagination
+        run wild with any AI-powered plarform.
       </p>
 
       <form
@@ -17,8 +61,10 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
       >
         <label>
           <span className="font-satoshi font-semibold text-base text-gray-700">
-            Your AI Prompt
+            Your AI Event
           </span>
+
+          <FileUploader url={post.url} setFiles={setFiles} />
 
           <textarea
             value={post.prompt}
@@ -64,4 +110,4 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
   );
 };
 
-export default Form;
+export default UpdateForm;
