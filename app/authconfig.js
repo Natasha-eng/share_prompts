@@ -7,6 +7,10 @@ export const authConfig = {
     authorized({ auth, request }) {
       const isLoggedIn = auth?.user;
       const isOnProfile = request.nextUrl.pathname.startsWith("/profile");
+      const isOnCreatePrompt =
+        request.nextUrl.pathname.startsWith("/create-prompt");
+      const isOnUpdatePrompt =
+        request.nextUrl.pathname.startsWith("/update-prompt");
       const isOnLogin = request.nextUrl.pathname.startsWith("/login");
       const isOnHome = request.nextUrl.pathname.startsWith("/");
       // if (!isLoggedIn) {
@@ -22,6 +26,12 @@ export const authConfig = {
       //   return Response.redirect(new URL("/", request.nextUrl));
       // }
       if (isOnProfile) {
+        if (isLoggedIn) return true;
+        return false;
+      } else if (isOnCreatePrompt) {
+        if (isLoggedIn) return true;
+        return false;
+      } else if (isOnUpdatePrompt) {
         if (isLoggedIn) return true;
         return false;
       } else if (isLoggedIn) {
