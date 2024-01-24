@@ -11,8 +11,10 @@ export const authConfig = {
       const isOnHome = request.nextUrl.pathname.startsWith("/");
       if (!isLoggedIn) {
         return Response.redirect(new URL("/login", request.nextUrl));
-      } else {
-        return true;
+      } else if (isLoggedIn) {
+        if (isOnLogin) {
+          return Response.redirect(new URL("/", request.nextUrl));
+        }
       }
       //   if (isOnProfile) {
       //     if (isLoggedIn) return true;
