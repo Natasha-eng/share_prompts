@@ -16,23 +16,23 @@ export const authConfig = {
       //     return Response.redirect(new URL("/", request.nextUrl));
       //   }
       // }
-      if (!isLoggedIn) {
-        return Response.redirect(new URL("/login", request.nextUrl));
-      } else {
-        return Response.redirect(new URL("/", request.nextUrl));
-      }
-      // if (isOnProfile) {
-      //   if (isLoggedIn) return true;
-      //   return false;
-      // } else if (isLoggedIn) {
-      //   return Response.redirect(new URL("/profile", request.nextUrl));
-      // } else if (isOnHome) {
-      //   if (isLoggedIn) {
-      //     return Response.redirect(new URL("/profile", request.nextUrl));
-      //   } else {
-      //     return false;
-      //   }
+      // if (!isLoggedIn) {
+      //   return Response.redirect(new URL("/login", request.nextUrl));
+      // } else {
+      //   return Response.redirect(new URL("/", request.nextUrl));
       // }
+      if (isOnProfile) {
+        if (isLoggedIn) return true;
+        return false;
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/profile", request.nextUrl));
+      } else if (isOnHome) {
+        if (isLoggedIn) {
+          return Response.redirect(new URL("/profile", request.nextUrl));
+        } else {
+          return false;
+        }
+      }
       return true;
     },
   },
