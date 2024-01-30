@@ -1,34 +1,36 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import PromptCard from "./PromptCard";
 import Loading from "@app/loading";
+import Pagination from "./Pagination";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Search from "./Search";
+import PromptCardList from "./PromptCardList";
 
-const PromptCardList = ({ data, setSearchText }) => {
-  return (
-    <div className="mt-16 prompt_layout">
-      {data.map((post) => {
-        return (
-          <PromptCard key={post.id} post={post} setSearchText={setSearchText} />
-        );
-      })}
-    </div>
-  );
-};
-
-const Feed = () => {
+const Feed = ({ currentUser, posts }) => {
   const [searchText, setSearchText] = useState("");
-  const [posts, setPosts] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(posts);
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  const pathname = usePathname();
 
-  const handleSearchChange = useCallback((e) => {
-    setSearchText(e.target.value);
-  }, []);
+  const handleSearchChange = useCallback(
+    (e) => {
+      const params = new URLSearchParams(searchParams);
+      params.set("page", 1);
+      replace(`${pathname}?${params}`.toLowerCase());
+      setSearchText(e.target.value);
+    },
+    [searchParams, replace, pathname]
+  );
 
   useEffect(() => {
     const id = setTimeout(() => {
+      setLoading(true);
       const regex = new RegExp(searchText, "i");
+
       const filteredPosts = posts.filter(
         (item) =>
           regex.test(item.username) ||
@@ -37,6 +39,8 @@ const Feed = () => {
       );
 
       setSearchResults(filteredPosts);
+      setCount(Math.ceil(filteredPosts.length));
+      setLoading(false);
     }, 500);
 
     return () => {
@@ -44,39 +48,36 @@ const Feed = () => {
     };
   }, [searchText, posts]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      const response = await fetch("/api/prompt");
-      const data = await response.json();
-      setPosts(data);
-      setLoading(false);
-    };
-    fetchPosts();
-  }, []);
+  let content;
+  if (searchResults.length <= 0) {
+    content = <div className="min-h-[17em] text-center leading-[17em]">No Events Found</div>;
+  } else {
+    content = loading ? (
+      <>
+        <Loading />
+      </>
+    ) : searchText ? (
+      <PromptCardList
+        currentUser={currentUser}
+        data={searchResults}
+        setSearchText={setSearchText}
+      />
+    ) : (
+      <PromptCardList
+        currentUser={currentUser}
+        data={posts}
+        setSearchText={setSearchText}
+      />
+    );
+  }
 
   return (
     <section className="feed">
-      <form className="relative w-full flex-center">
-        <input
-          type="text"
-          placeholder="Search for a tag or a username"
-          value={searchText}
-          onChange={handleSearchChange}
-          required
-          className="search_input peer"
-        />
-      </form>
+      <Search searchText={searchText} handleSearchChange={handleSearchChange} />
 
-      {loading ? (
-        <>
-          <Loading />
-        </>
-      ) : searchText ? (
-        <PromptCardList data={searchResults} setSearchText={setSearchText} />
-      ) : (
-        <PromptCardList data={posts} setSearchText={setSearchText} />
-      )}
+      {content}
+
+      <Pagination count={count} />
     </section>
   );
 };

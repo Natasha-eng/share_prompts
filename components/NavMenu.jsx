@@ -18,7 +18,11 @@ const NavMenu = ({ user, signOut }) => {
             <Link href="/create-prompt" className="black_btn">
               Create Post
             </Link>
-            <button type="button" onClick={signOut} className="outline_btn">
+            <button
+              type="button"
+              onClick={async () => signOut()}
+              className="outline_btn"
+            >
               Sign Out
             </button>
             <Link href="/profile">{user?.username}</Link>
@@ -31,7 +35,7 @@ const NavMenu = ({ user, signOut }) => {
                 type="button"
                 key={111}
                 onClick={async () => {
-                  await signOut;
+                  router.push("/login");
                 }}
               >
                 Sign In
@@ -41,7 +45,7 @@ const NavMenu = ({ user, signOut }) => {
         )}
       </div>
       {/* Mobile Navigation */}
-      <div className="flex relative sm:hidden">
+      <div className="relative sm:hidden">
         {user?.username ? (
           <div className="flex">
             <div
@@ -71,7 +75,7 @@ const NavMenu = ({ user, signOut }) => {
                   className="mt-5 w-full black_btn"
                   type="button"
                   onClick={async () => {
-                    await signOut;
+                    await signOut();
                   }}
                 >
                   Sign Out

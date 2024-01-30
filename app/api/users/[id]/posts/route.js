@@ -5,8 +5,12 @@ export const GET = async (req, { params }) => {
 
   try {
     const prompts = await findPromptsByFilter(userId);
+    const postsWithTagsArr = prompts.map((post) => ({
+      ...post,
+      tag: post.tag.split(" "),
+    }));
 
-    return new Response(JSON.stringify(prompts), {
+    return new Response(JSON.stringify(postsWithTagsArr), {
       status: 200,
     });
   } catch (err) {

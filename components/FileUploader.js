@@ -6,7 +6,6 @@ import { generateClientDropzoneAccept } from "uploadthing/client";
 
 import Image from "next/image";
 import { convertFileToUrl } from "@utils/utils";
-import { useUploadThing } from "@lib/uploadthing";
 
 export function FileUploader({ url, setFiles }) {
   const [convertedFile, setConvertedFile] = useState(url);
@@ -31,7 +30,7 @@ export function FileUploader({ url, setFiles }) {
         className="cursor-pointer"
       />
 
-      {url.length > 0 ? (
+      {url?.length > 0 ? (
         <div className="flex h-full w-full flex-1 justify-center ">
           <Image
             src={convertedFile || "/images/upload.svg"}
@@ -40,7 +39,6 @@ export function FileUploader({ url, setFiles }) {
             width={250}
             height={250}
             className="rounded-xl"
-            objectFit="cover"
           />
         </div>
       ) : (

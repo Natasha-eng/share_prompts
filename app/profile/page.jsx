@@ -7,7 +7,6 @@ import { findUser } from "@lib/actions";
 const MyProfile = async () => {
   const userData = await auth();
   const username = userData?.user ? userData?.user.username : null;
-
   const currentUser = username && (await findUser(username));
 
   return (
