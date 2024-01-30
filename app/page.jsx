@@ -1,22 +1,28 @@
 export const revalidate = 0;
 
 import Feed from "@components/Feed";
+import { auth } from "./auth";
+import { fatchAllPrompts, findUser } from "@lib/actions";
 
 const Home = async () => {
-  // const session = getServerSession(options);
+  const userData = await auth();
+  const username = userData?.user ? userData?.user.username : null;
+  const currentUser = username && (await findUser(username));
+
+  const posts = await fatchAllPrompts();
 
   return (
-    <section className="w-full flex-center flex-col">
-      <h1 className="head_text text_center">
+    <section className="min-h-[80vh] w-full pt-[100px]">
+      <h1 className="head_text text-center">
         Discover & Share
         <br className="max-md:hidden" />
-        <span className="orange_gradient flex-center">Events</span>
+        <span className="orange_gradient text-center">Events</span>
       </h1>
       <p className="desc text-center">
         ShareEvents is an open-source tool for modern world to discover, create
         and share creative events
       </p>
-      <Feed />
+      <Feed posts={posts} currentUser={currentUser} />
     </section>
   );
 };

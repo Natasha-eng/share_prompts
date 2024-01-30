@@ -1,13 +1,13 @@
 const LoginForm = ({ user, setUser, submitting, handleSubmit }) => {
   return (
-    <section className="w-full max-w-full flex-start flex-col">
+    <section className="min-h-[80vh] pt-[100px] w-full max-w-full flex-center flex-col">
       <h1 className="head_text text-left">
         <span className="blue_gradient">Log In</span>
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorfism"
+        className="mt-10 w-full max-w-md flex flex-col gap-7 glassmorfism"
       >
         <label>
           <span className="font-satoshi font-semibold text-base text-gray-700">

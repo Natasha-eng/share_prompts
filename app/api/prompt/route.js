@@ -4,8 +4,10 @@ import { fatchAllPrompts } from "@lib/airtable";
 
 export const GET = async (request) => {
   try {
-    const prompts = await fatchAllPrompts();
-    return new Response(JSON.stringify(prompts), {
+    const posts = await fatchAllPrompts();
+
+    const count = Math.ceil(posts.length);
+    return new Response(JSON.stringify({ posts, count }), {
       status: 200,
     });
   } catch (err) {

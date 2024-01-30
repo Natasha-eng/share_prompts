@@ -12,7 +12,6 @@ const Profile = ({ name, desc, currentUser }) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      //session.user.id
       setLoading(true);
       const response = await fetch(`/api/users/${currentUser?.userId}/posts`);
       const data = await response.json();
@@ -24,7 +23,7 @@ const Profile = ({ name, desc, currentUser }) => {
   }, [currentUser?.userId]);
 
   const handleEdit = (post) => {
-    router.push(`/update-prompt?id=${post.id}`);
+    router.push(`/update-prompt?id=${post.recordId}`);
   };
 
   const handleDelete = async (post) => {
@@ -48,17 +47,17 @@ const Profile = ({ name, desc, currentUser }) => {
   };
 
   return (
-    <section className="w-full">
+    <section className="min-h-[80vh] w-full pt-[100px] flex flex-col items-center">
       <h1 className="head_text text_left">
         <span className="blue_gradient">{name}</span> Profile
       </h1>
       <p className="desc text_left">{desc}</p>
 
-      <div className="mt-10 prompt_layout">
+      <div className="w-full flex justify-center flex-wrap mt-16 prompt_layout">
         {loading ? (
           <Loading />
-        ) : (
-          posts.map((post) => {
+        ) : posts.length > 0 ? (
+          posts?.map((post) => {
             return (
               <PromptCard
                 key={post.id}
@@ -69,6 +68,10 @@ const Profile = ({ name, desc, currentUser }) => {
               />
             );
           })
+        ) : (
+          <div className="min-h-[9em] text-center leading-[9em]">
+            Create Your Events
+          </div>
         )}
       </div>
     </section>
