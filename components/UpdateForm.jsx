@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { FileUploader } from "./FileUploader";
 import { useUploadThing } from "@lib/uploadthing";
-import { useState } from "react";
 import { Select, SelectItem } from "@nextui-org/react";
 import { updatePrompt } from "@lib/actions";
 import { eventTypes } from "@lib/data";

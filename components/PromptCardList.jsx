@@ -1,8 +1,8 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import PromptCard from "./PromptCard";
 import { useMemo } from "react";
+import PromptCard from "./PromptCard";
 
 const PromptCardList = ({ data, setSearchText, currentUser }) => {
   const searchParams = useSearchParams();

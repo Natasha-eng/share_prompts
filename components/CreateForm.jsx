@@ -37,7 +37,7 @@ const CreateForm = ({ type }) => {
         return;
       }
 
-      let uploadedImageUrl = uploadImages[0].url;
+      let uploadedImageUrl = uploadImages[0]?.url;
 
       const data = await createPrompt(
         post.prompt,

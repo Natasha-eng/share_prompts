@@ -2,7 +2,6 @@
 
 import LoginForm from "@components/LoginForm";
 import { authenticate } from "@lib/actions";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Login = () => {
@@ -10,19 +9,25 @@ const Login = () => {
     username: "",
     password: "",
   });
-
-  const router = useRouter();
-
+  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const handleInputChange = (e) => {
+    setError("");
+    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const loginHandler = async (e) => {
     e.preventDefault();
 
-    setSubmitting(true);
     try {
-      authenticate(user.username, user.password);
+      setSubmitting(true);
+      const res = await authenticate(
+        user.username.trim(),
+        user.password.trim()
+      );
     } catch (err) {
-      console.log(err);
+      setError(err.message);
     } finally {
       setSubmitting(false);
     }
@@ -35,6 +40,8 @@ const Login = () => {
         user={user}
         setUser={setUser}
         submitting={submitting}
+        error={error}
+        handleInputChange={handleInputChange}
       />
     </div>
   );

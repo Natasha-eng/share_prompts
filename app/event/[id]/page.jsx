@@ -5,7 +5,6 @@ import {
   fatchAllPrompts,
   findUser,
   getEventById,
-  getRelatedEventsByTag,
 } from "@lib/actions";
 
 const Event = async ({ params }) => {
