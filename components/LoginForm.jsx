@@ -9,6 +9,11 @@ const LoginForm = ({
 }) => {
   return (
     <section className="min-h-[80vh] pt-[100px] w-full max-w-full flex-center flex-col">
+      <div>
+        create your own account or use credentials:
+        <div>username: Natasha</div>
+        <div> password: 123</div>
+      </div>
       <h1 className="head_text text-left">
         <span className="blue_gradient">Log In</span>
       </h1>
