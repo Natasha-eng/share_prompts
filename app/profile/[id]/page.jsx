@@ -1,8 +1,8 @@
 "use client";
 
-import Profile from "@components/Profile";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import Profile from "@components/Profile";
 
 const UserProfile = ({ params }) => {
   const searchParams = useSearchParams();

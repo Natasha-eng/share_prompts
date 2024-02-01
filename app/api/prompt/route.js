@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { fatchAllPrompts } from "@lib/airtable";
+import { fatchAllPrompts } from "@lib/actions";
 
 export const GET = async (request) => {
   try {

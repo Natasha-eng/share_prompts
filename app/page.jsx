@@ -1,7 +1,7 @@
 export const revalidate = 0;
 
-import Feed from "@components/Feed";
 import { auth } from "./auth";
+import Feed from "@components/Feed";
 import { fatchAllPrompts, findUser } from "@lib/actions";
 
 const Home = async () => {

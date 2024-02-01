@@ -1,9 +1,9 @@
 "use client";
 
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Loading from "@app/loading";
 import Pagination from "./Pagination";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Search from "./Search";
 import PromptCardList from "./PromptCardList";
 
@@ -50,7 +50,11 @@ const Feed = ({ currentUser, posts }) => {
 
   let content;
   if (searchResults.length <= 0) {
-    content = <div className="min-h-[17em] text-center leading-[17em]">No Events Found</div>;
+    content = (
+      <div className="min-h-[17em] text-center leading-[17em]">
+        No Events Found
+      </div>
+    );
   } else {
     content = loading ? (
       <>

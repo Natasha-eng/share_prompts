@@ -5,7 +5,8 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request }) {
-      const isLoggedIn = auth?.user;
+      const isLoggedIn = auth?.user && Object.keys(auth?.user).length > 0;
+
       const isOnProfile = request.nextUrl.pathname.startsWith("/profile");
       const isOnCreatePrompt =
         request.nextUrl.pathname.startsWith("/create-prompt");
@@ -14,18 +15,7 @@ export const authConfig = {
       const isOnEvent = request.nextUrl.pathname.startsWith("/event");
       const isOnLogin = request.nextUrl.pathname.startsWith("/login");
       const isOnHome = request.nextUrl.pathname.startsWith("/");
-      // if (!isLoggedIn) {
-      //   return Response.redirect(new URL("/login", request.nextUrl));
-      // } else if (isLoggedIn) {
-      //   if (isOnLogin) {
-      //     return Response.redirect(new URL("/", request.nextUrl));
-      //   }
-      // }
-      // if (!isLoggedIn) {
-      //   return Response.redirect(new URL("/login", request.nextUrl));
-      // } else {
-      //   return Response.redirect(new URL("/", request.nextUrl));
-      // }
+      const isOnRegister = request.nextUrl.pathname.startsWith("/register");
 
       if (isOnProfile) {
         if (isLoggedIn) return true;
@@ -39,6 +29,12 @@ export const authConfig = {
       } else if (isOnEvent) {
         if (isLoggedIn) return true;
         return false;
+      } else if (isOnRegister) {
+        if (!isLoggedIn) {
+          return true;
+        } else {
+          return Response.redirect(new URL("/register", request.nextUrl));
+        }
       } else if (isOnLogin) {
         if (isLoggedIn) {
           return Response.redirect(new URL("/profile", request.nextUrl));
