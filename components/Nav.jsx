@@ -14,8 +14,8 @@ const Nav = async () => {
   };
 
   return (
-    <nav className="nav bg-stone-400 z-20 fixed left-0 w-screen pb-8 pt-8 sm:px-16 px-6">
-      <div className="flex-between m-auto max-w-[71rem]">
+    <nav className="nav z-20 fixed left-0 w-full py-8 sm:px-16 px-6">
+      <div className="flex-between m-auto max-w-284">
         <Link href="/" className="flex gap-2 flex-center">
           <Image
             alt="Prompt logo"

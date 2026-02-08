@@ -1,10 +1,9 @@
 import { findPromptsByFilter } from "@lib/airtable";
 
 export const GET = async (req, { params }) => {
-  const userId = params.id;
-
+  const { id } = await params;
   try {
-    const prompts = await findPromptsByFilter(userId);
+    const prompts = await findPromptsByFilter(id);
     const postsWithTagsArr = prompts.map((post) => ({
       ...post,
       tag: post.tag.split(" "),

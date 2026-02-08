@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export const GET = async (req, { params }) => {
-  const id = params.id;
+  const {id} = await params;
 
   try {
     const prompt = await findPromptById(id);

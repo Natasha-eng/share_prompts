@@ -8,7 +8,7 @@ const LoginForm = ({
   handleSubmit,
 }) => {
   return (
-    <section className="min-h-[80vh] pt-[100px] w-full max-w-full flex-center flex-col">
+    <section className="min-h-[80vh] pt-25 w-full max-w-full flex-center flex-col">
       <div>
         create your own account or use credentials:
         <div>username: Natasha</div>
@@ -56,9 +56,9 @@ const LoginForm = ({
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white"
+            className="px-5 py-1.5 text-sm bg-orange-400 hover:bg-orange-500 rounded-full text-white"
           >
-            {submitting ? "Submitting..." : "Log In"}
+            {submitting ? "Submitting..." : "Sign In"}
           </button>
         </div>
       </form>

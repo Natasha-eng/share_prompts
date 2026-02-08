@@ -1,17 +1,13 @@
 import { auth } from "@app/auth";
 import EventDetails from "@components/EventDetails";
 import RelatedEvents from "@components/RelatedEvents";
-import {
-  fatchAllPrompts,
-  findUser,
-  getEventById,
-} from "@lib/actions";
+import { fatchAllPrompts, findUser, getEventById } from "@lib/actions";
 
 const Event = async ({ params }) => {
   const userData = await auth();
   const username = userData?.user ? userData?.user.username : null;
   const currentUser = username && (await findUser(username));
-  const { id } = params;
+  const { id } = await params;
 
   const event = await getEventById(id);
 

@@ -5,7 +5,7 @@ import { FileUploader } from "./FileUploader";
 import { useState } from "react";
 import { useUploadThing } from "@lib/uploadthing";
 import { createPrompt } from "@lib/actions";
-import { Select, SelectItem } from "@nextui-org/react";
+import { Label, ListBox, Select } from "@heroui/react";
 import { eventTypes } from "@lib/data";
 
 const CreateForm = ({ type }) => {
@@ -20,8 +20,10 @@ const CreateForm = ({ type }) => {
     price: "",
   });
 
-  const handleSelectionChange = (e) => {
-    setPost({ ...post, type: e.target.value });
+  const handleSelectionChange = (value) => {
+    setPost((post) => {
+      return { ...post, type: value };
+    });
   };
 
   let { startUpload } = useUploadThing("imageUploader");
@@ -30,9 +32,10 @@ const CreateForm = ({ type }) => {
     e.preventDefault();
 
     setSubmitting(true);
+
     try {
       let uploadImages = await startUpload(files);
-
+F
       if (!uploadImages) {
         return;
       }
@@ -45,7 +48,7 @@ const CreateForm = ({ type }) => {
         post.type,
         post.price,
         post.location,
-        uploadedImageUrl
+        uploadedImageUrl,
       );
     } catch (err) {
       console.log(err);
@@ -55,7 +58,7 @@ const CreateForm = ({ type }) => {
   };
 
   return (
-    <section className="min-h-[80vh] w-full pt-[100px] max-w-full flex-center flex-col">
+    <section className="min-h-[80vh] w-full pt-25 max-w-full flex-center flex-col">
       <h1 className="head_text text-center">
         <span className="blue_gradient">{type} Post</span>
       </h1>
@@ -74,18 +77,33 @@ const CreateForm = ({ type }) => {
         <div>
           <Select
             isRequired
+            name="type"
             label="Event Type"
-            placeholder="Select an type"
-            defaultSelectedKeys={["Cultural"]}
-            className=" w-full sm:max-w-xs"
-            selectedKeys={[post.type]}
+            placeholder="Select type"
+            value={post.type}
+            className="max-w-xs"
             onChange={handleSelectionChange}
+            variant="secondary"
           >
-            {eventTypes.map((type) => (
-              <SelectItem key={type.value} value={type.value}>
-                {type.label}
-              </SelectItem>
-            ))}
+            <Label>Event Type</Label>
+            <Select.Trigger>
+              <Select.Value />
+              <Select.Indicator />
+            </Select.Trigger>
+            <Select.Popover>
+              <ListBox>
+                {eventTypes.map((type) => (
+                  <ListBox.Item
+                    key={type.value}
+                    id={type.value}
+                    textValue={type.value}
+                  >
+                    {type.value}
+                    <ListBox.ItemIndicator />
+                  </ListBox.Item>
+                ))}
+              </ListBox>
+            </Select.Popover>
           </Select>
           <div className="mt-4 sm:flex flex-row gap-4">
             <input
@@ -93,6 +111,7 @@ const CreateForm = ({ type }) => {
               onChange={(e) => setPost({ ...post, price: e.target.value })}
               type="text"
               placeholder="Price"
+              name="price"
               required
               className="form_input"
             />
@@ -100,6 +119,7 @@ const CreateForm = ({ type }) => {
               value={post.location}
               onChange={(e) => setPost({ ...post, location: e.target.value })}
               type="text"
+              name={"location"}
               placeholder="Location"
               required
               className="form_input"
@@ -112,6 +132,7 @@ const CreateForm = ({ type }) => {
             value={post.prompt}
             onChange={(e) => setPost({ ...post, prompt: e.target.value })}
             placeholder="Write your post here"
+            name="description"
             required
             className="form_textarea"
           />
@@ -128,6 +149,7 @@ const CreateForm = ({ type }) => {
             value={post.tag}
             onChange={(e) => setPost({ ...post, tag: e.target.value })}
             type="text"
+            name="tag"
             placeholder="#Tag"
             required
             className="form_input"
@@ -142,7 +164,7 @@ const CreateForm = ({ type }) => {
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white"
+            className="px-5 py-1.5 text-sm bg-indigo-500 hover:bg-fuchsia-500 rounded-full text-white"
           >
             {submitting ? `${type}ing...` : type}
           </button>

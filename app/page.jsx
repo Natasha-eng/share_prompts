@@ -12,7 +12,7 @@ const Home = async () => {
   const posts = await fatchAllPrompts();
 
   return (
-    <section className="min-h-[80vh] w-full pt-[100px]">
+    <section className="min-h-[80vh] w-full pt-25">
       <h1 className="head_text text-center">
         Discover & Share
         <br className="max-md:hidden" />
