@@ -1,7 +1,7 @@
 import Nav from "@components/Nav";
-import "@styles/globals.css";
+import "./global.css";
 import "@uploadthing/react/styles.css";
-import { Providers } from "./providers";
+// import { Providers } from "./providers";
 
 export const metadata = {
   title: "Share Prompts",
@@ -12,16 +12,14 @@ const RootLayout = async ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <Providers>
-          <div className="main">
-            <div className="gradient" />
-          </div>
+        <div className="main">
+          <div className="gradient" />
+        </div>
 
-          <main className="app">
-            <Nav />
-            {children}
-          </main>
-        </Providers>
+        <main className="app">
+          <Nav />
+          {children}
+        </main>
       </body>
     </html>
   );

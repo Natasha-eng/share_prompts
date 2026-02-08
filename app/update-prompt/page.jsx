@@ -4,12 +4,12 @@ import UpdateForm from "@components/UpdateForm";
 import { getEventById } from "@lib/actions";
 
 const EditPrompt = async ({ searchParams }) => {
-  const promptId = searchParams?.id;
+  const { id } = await searchParams;
 
-  const promptDetails = await getEventById(promptId);
+  const promptDetails = await getEventById(id);
 
   return (
-    <UpdateForm type="Edit" promptDetails={promptDetails} promptId={promptId} />
+    <UpdateForm type="Edit" promptDetails={promptDetails} promptId={id} />
   );
 };
 

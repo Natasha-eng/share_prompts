@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { FileUploader } from "./FileUploader";
 import { useUploadThing } from "@lib/uploadthing";
-import { Select, SelectItem } from "@nextui-org/react";
+import { Label, ListBox, Select } from "@heroui/react";
 import { updatePrompt } from "@lib/actions";
 import { eventTypes } from "@lib/data";
 
@@ -58,7 +58,7 @@ const UpdateForm = ({ type, promptDetails, promptId }) => {
   };
 
   return (
-    <section className="min-h-[80vh] w-full pt-[100px] max-w-full flex-center flex-col">
+    <section className="min-h-[80vh] w-full pt-25 max-w-full flex-center flex-col">
       <h1 className="head_text text-center">
         <span className="blue_gradient">{type} Post</span>
       </h1>
@@ -78,17 +78,31 @@ const UpdateForm = ({ type, promptDetails, promptId }) => {
           <Select
             isRequired
             label="Event Type"
-            placeholder="Select an type"
-            defaultSelectedKeys={["Cultural"]}
+            placeholder="Select type"
+            value={post.type}
             className="max-w-xs mb-6"
-            selectedKeys={[post.type]}
+            variant="secondary"
             onChange={handleSelectionChange}
           >
-            {eventTypes.map((type) => (
-              <SelectItem key={type.value} value={type.value}>
-                {type.label}
-              </SelectItem>
-            ))}
+            <Label>Event Type</Label>
+            <Select.Trigger>
+              <Select.Value />
+              <Select.Indicator />
+            </Select.Trigger>
+            <Select.Popover>
+              <ListBox>
+                {eventTypes.map((type) => (
+                  <ListBox.Item
+                    key={type.value}
+                    id={type.value}
+                    textValue={type.value}
+                  >
+                    {type.value}
+                    <ListBox.ItemIndicator />
+                  </ListBox.Item>
+                ))}
+              </ListBox>
+            </Select.Popover>
           </Select>
 
           <div className="mt-4 mb-4 sm:flex flex-row gap-4">
@@ -139,14 +153,14 @@ const UpdateForm = ({ type, promptDetails, promptId }) => {
         </label>
 
         <div className="flex-end mx-3 mb-5 gap-4">
-          <Link href="/" className="text-gray-500 text-sm">
+          <Link href="/" className="text-red-500 hover:text-red-900 text-sm">
             Cancel
           </Link>
 
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white"
+            className="px-5 py-1.5 text-sm bg-indigo-500 hover:bg-fuchsia-500 bg-primary-orange rounded-full text-white"
           >
             {submitting ? `${type}ing...` : type}
           </button>

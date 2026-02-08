@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
 import { authConfig } from "./authconfig";
 import { findUser } from "@lib/actions";
 import bcrypt from "bcrypt";
+import Credentials from "next-auth/providers/credentials";
 
 const login = async (credentials) => {
   try {
@@ -30,7 +30,7 @@ const login = async (credentials) => {
 export const { signIn, signOut, auth } = NextAuth({
   ...authConfig,
   providers: [
-    CredentialsProvider({
+    Credentials({
       async authorize(credentials) {
         try {
           const user = await login(credentials);

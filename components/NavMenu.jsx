@@ -12,7 +12,7 @@ const NavMenu = ({ user, signOut }) => {
   return (
     <>
       {/* Desktop Navigation */}
-      <div className="hidden sm:flex">
+      <div className="hidden sm:flex!">
         {user?.username ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">

@@ -1,5 +1,6 @@
 import { createUploadthing } from "uploadthing/next";
 
+
 const f = createUploadthing();
 
 const auth = (reqz) => ({ id: "fakeId" }); // Fake auth function
