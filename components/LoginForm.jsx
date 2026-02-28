@@ -1,12 +1,7 @@
 import Link from "next/link";
+import { useFormStatus } from "react-dom";
 
-const LoginForm = ({
-  handleInputChange,
-  error,
-  user,
-  submitting,
-  handleSubmit,
-}) => {
+const LoginForm = ({ error, submitting, handleSubmit }) => {
   return (
     <section className="min-h-[80vh] pt-25 w-full max-w-full flex-center flex-col">
       <div>
@@ -19,7 +14,7 @@ const LoginForm = ({
       </h1>
 
       <form
-        onSubmit={handleSubmit}
+        action={handleSubmit}
         className="mt-10 w-full max-w-md flex flex-col gap-7 glassmorfism"
       >
         <label>
@@ -28,8 +23,6 @@ const LoginForm = ({
           </span>
 
           <input
-            value={user.username}
-            onChange={(e) => handleInputChange(e)}
             placeholder="username"
             required
             className="form_input "
@@ -42,8 +35,6 @@ const LoginForm = ({
             Password
           </span>
           <input
-            value={user.password}
-            onChange={(e) => handleInputChange(e)}
             type="password"
             placeholder="password"
             required

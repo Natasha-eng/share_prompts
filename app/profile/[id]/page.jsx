@@ -4,10 +4,10 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Profile from "@components/Profile";
 
-const UserProfile = ({ params }) => {
+const UserProfile = async ({ params }) => {
   const searchParams = useSearchParams();
   const userName = searchParams.get("name");
-  const { id } = React.use(params);
+  const { id } = await params;
 
   const [user, setUser] = useState([]);
 

@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    // appDir: true,
-    // serverMinification: false,
-  },
   images: {
     remotePatterns: [
       {
@@ -33,13 +29,6 @@ const nextConfig = {
       },
     ],
   },
-  // webpack(config) {
-  //   config.experiments = {
-  //     ...config.experiments,
-  //     topLevelAwait: true,
-  //   };
-  //   return config;
-  // },
 };
 
 module.exports = nextConfig;

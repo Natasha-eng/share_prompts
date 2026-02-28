@@ -2,46 +2,31 @@
 
 import LoginForm from "@components/LoginForm";
 import { authenticate } from "@lib/actions";
-import { useState } from "react";
+import { useActionState } from "react";
 
 const Login = () => {
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
+  const [formState, signinAction, isPending] = useActionState(loginHandler, {
+    data: null,
+    error: null,
   });
-  const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
 
-  const handleInputChange = (e) => {
-    setError("");
-    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const loginHandler = async (e) => {
-    e.preventDefault();
+  async function loginHandler(prevState, formData) {
+    const username = formData.get("username");
+    const password = formData.get("password");
 
     try {
-      setSubmitting(true);
-      const res = await authenticate(
-        user.username.trim(),
-        user.password.trim()
-      );
+      const res = await authenticate(username.trim(), password.trim());
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setSubmitting(false);
+      return { ...prevState, error: err.message };
     }
-  };
+  }
 
   return (
     <div>
       <LoginForm
-        handleSubmit={loginHandler}
-        user={user}
-        setUser={setUser}
-        submitting={submitting}
-        error={error}
-        handleInputChange={handleInputChange}
+        handleSubmit={signinAction}
+        submitting={isPending}
+        error={formState?.error}
       />
     </div>
   );

@@ -2,40 +2,32 @@
 
 import Link from "next/link";
 import { FileUploader } from "./FileUploader";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { useUploadThing } from "@lib/uploadthing";
 import { createPrompt } from "@lib/actions";
 import { Label, ListBox, Select } from "@heroui/react";
 import { eventTypes } from "@lib/data";
 
 const CreateForm = ({ type }) => {
-  const [submitting, setSubmitting] = useState(false);
+  const [formState, createPost, submitting] = useActionState(
+    createPromptHandler,
+    {
+      data: null,
+      error: null,
+    },
+  );
   const [files, setFiles] = useState([]);
-  const [post, setPost] = useState({
-    prompt: "",
-    tag: "",
-    url: "",
-    type: "Cultural",
-    location: "",
-    price: "",
-  });
-
-  const handleSelectionChange = (value) => {
-    setPost((post) => {
-      return { ...post, type: value };
-    });
-  };
-
   let { startUpload } = useUploadThing("imageUploader");
 
-  const createPromptHandler = async (e) => {
-    e.preventDefault();
-
-    setSubmitting(true);
+  async function createPromptHandler(prevState, formData) {
+    const type = formData.get("type");
+    const price = formData.get("price");
+    const location = formData.get("locatioin");
+    const tag = formData.get("tag");
+    const description = formData.get("description");
 
     try {
       let uploadImages = await startUpload(files);
-F
       if (!uploadImages) {
         return;
       }
@@ -43,19 +35,18 @@ F
       let uploadedImageUrl = uploadImages[0]?.url;
 
       const data = await createPrompt(
-        post.prompt,
-        post.tag,
-        post.type,
-        post.price,
-        post.location,
+        description,
+        tag,
+        type,
+        price,
+        location,
         uploadedImageUrl,
       );
     } catch (err) {
       console.log(err);
-    } finally {
-      setSubmitting(false);
+      return { ...prevState, error: err };
     }
-  };
+  }
 
   return (
     <section className="min-h-[80vh] w-full pt-25 max-w-full flex-center flex-col">
@@ -68,7 +59,7 @@ F
       </p>
 
       <form
-        onSubmit={createPromptHandler}
+        action={createPost}
         className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorfism"
       >
         <span className="font-satoshi font-semibold text-base text-gray-700">
@@ -80,9 +71,7 @@ F
             name="type"
             label="Event Type"
             placeholder="Select type"
-            value={post.type}
             className="max-w-xs"
-            onChange={handleSelectionChange}
             variant="secondary"
           >
             <Label>Event Type</Label>
@@ -107,8 +96,6 @@ F
           </Select>
           <div className="mt-4 sm:flex flex-row gap-4">
             <input
-              value={post.price}
-              onChange={(e) => setPost({ ...post, price: e.target.value })}
               type="text"
               placeholder="Price"
               name="price"
@@ -116,8 +103,6 @@ F
               className="form_input"
             />
             <input
-              value={post.location}
-              onChange={(e) => setPost({ ...post, location: e.target.value })}
               type="text"
               name={"location"}
               placeholder="Location"
@@ -126,11 +111,9 @@ F
             />
           </div>
 
-          <FileUploader url={post.url} setFiles={setFiles} />
+          <FileUploader name="file" setFiles={setFiles} />
 
           <textarea
-            value={post.prompt}
-            onChange={(e) => setPost({ ...post, prompt: e.target.value })}
             placeholder="Write your post here"
             name="description"
             required
@@ -146,8 +129,6 @@ F
             </span>
           </span>
           <input
-            value={post.tag}
-            onChange={(e) => setPost({ ...post, tag: e.target.value })}
             type="text"
             name="tag"
             placeholder="#Tag"

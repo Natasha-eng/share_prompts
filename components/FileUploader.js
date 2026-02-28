@@ -7,7 +7,7 @@ import { generateClientDropzoneAccept } from "uploadthing/client";
 import Image from "next/image";
 import { convertFileToUrl } from "@utils/utils";
 
-export function FileUploader({ url, setFiles }) {
+export function FileUploader({ url, setFiles, name }) {
   const [convertedFile, setConvertedFile] = useState(url);
   const onDrop = useCallback((acceptedFiles) => {
     setFiles(acceptedFiles);
@@ -33,7 +33,7 @@ export function FileUploader({ url, setFiles }) {
           <Image
             src={convertedFile || "/images/upload.svg"}
             alt="image"
-            name="uploadImg"
+            name={name}
             width={250}
             height={250}
             className="rounded-xl"
@@ -43,7 +43,7 @@ export function FileUploader({ url, setFiles }) {
         <div className="flex-center flex-col py-5 text-grey-500">
           <Image
             src={convertedFile || "/images/upload.svg"}
-            name="uploadImg"
+            name={name}
             width={77}
             height={77}
             alt="file upload"

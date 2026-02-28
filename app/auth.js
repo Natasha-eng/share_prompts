@@ -14,7 +14,7 @@ const login = async (credentials) => {
 
     const isPasswordCorrect = await bcrypt.compare(
       credentials.password,
-      user.password
+      user.password,
     );
 
     if (!isPasswordCorrect) {
@@ -34,7 +34,6 @@ export const { signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         try {
           const user = await login(credentials);
-
           return user;
         } catch (err) {
           return null;

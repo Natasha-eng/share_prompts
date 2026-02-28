@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { FileUploader } from "./FileUploader";
 import { useUploadThing } from "@lib/uploadthing";
 import { Label, ListBox, Select } from "@heroui/react";
@@ -9,28 +9,29 @@ import { updatePrompt } from "@lib/actions";
 import { eventTypes } from "@lib/data";
 
 const UpdateForm = ({ type, promptDetails, promptId }) => {
-  const [submitting, setSubmitting] = useState(false);
-  const [files, setFiles] = useState([]);
-  const [post, setPost] = useState({
-    recordId: promptDetails.recordId,
-    prompt: promptDetails.prompt,
-    tag: promptDetails.tag.join(" "),
-    url: promptDetails.img,
-    type: promptDetails.type,
-    price: promptDetails.price,
-    location: promptDetails.location,
+  const [formState, updateForm, submitting] = useActionState(handleSubmit, {
+    data: {
+      recordId: promptDetails.recordId,
+      prompt: promptDetails.prompt,
+      tag: promptDetails.tag.join(" "),
+      url: promptDetails.img,
+      type: promptDetails.type,
+      price: promptDetails.price,
+      location: promptDetails.location,
+    },
+    error: null,
   });
+
+  const [files, setFiles] = useState([]);
 
   let { startUpload } = useUploadThing("imageUploader");
 
-  const handleSelectionChange = (e) => {
-    setPost({ ...post, type: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    setSubmitting(true);
+  async function handleSubmit(prevState, formData) {
+    const prompt = formData.get("description");
+    const type = formData.get("type");
+    const tag = formData.get("tag");
+    const price = formData.get("price");
+    const location = formData.get("location");
 
     if (!promptId) return alert("Prompt ID not found");
     try {
@@ -41,21 +42,23 @@ const UpdateForm = ({ type, promptDetails, promptId }) => {
       let uploadedImageUrl = uploadImages[0]?.url;
 
       const ojectToUpdate = {
-        prompt: post.prompt,
-        tag: post.tag,
+        prompt,
+        tag,
         img: uploadedImageUrl,
-        price: post.price,
-        location: post.location,
-        type: post.type,
+        price,
+        location,
+        type,
       };
 
-      const updated = await updatePrompt(post.recordId, ojectToUpdate);
+      const updated = await updatePrompt(
+        formState.data.recordId,
+        ojectToUpdate,
+      );
     } catch (err) {
       console.log(err);
-    } finally {
-      setSubmitting(false);
+      return { ...prevState, error: err };
     }
-  };
+  }
 
   return (
     <section className="min-h-[80vh] w-full pt-25 max-w-full flex-center flex-col">
@@ -68,7 +71,7 @@ const UpdateForm = ({ type, promptDetails, promptId }) => {
       </p>
 
       <form
-        onSubmit={handleSubmit}
+        action={updateForm}
         className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorfism"
       >
         <span className="font-satoshi font-semibold text-base text-gray-700">
@@ -79,10 +82,10 @@ const UpdateForm = ({ type, promptDetails, promptId }) => {
             isRequired
             label="Event Type"
             placeholder="Select type"
-            value={post.type}
+            defaultValue={formState.data.type}
             className="max-w-xs mb-6"
             variant="secondary"
-            onChange={handleSelectionChange}
+            name="type"
           >
             <Label>Event Type</Label>
             <Select.Trigger>
@@ -107,31 +110,35 @@ const UpdateForm = ({ type, promptDetails, promptId }) => {
 
           <div className="mt-4 mb-4 sm:flex flex-row gap-4">
             <input
-              value={post.price}
-              onChange={(e) => setPost({ ...post, price: e.target.value })}
+              defaultValue={formState.data.price}
               type="text"
               placeholder="Price"
               required
               className="form_input"
+              name="price"
             />
             <input
-              value={post.location}
-              onChange={(e) => setPost({ ...post, location: e.target.value })}
+              defaultValue={formState.data.location}
               type="text"
               placeholder="Location"
               required
               className="form_input"
+              name="location"
             />
           </div>
 
-          <FileUploader url={post.url} setFiles={setFiles} />
+          <FileUploader
+            url={formState.data.url}
+            name="file"
+            setFiles={setFiles}
+          />
 
           <textarea
-            value={post.prompt}
-            onChange={(e) => setPost({ ...post, prompt: e.target.value })}
+            defaultValue={formState.data.prompt}
             placeholder="Write your post here"
             required
             className="form_textarea "
+            name="description"
           />
         </div>
 
@@ -143,12 +150,12 @@ const UpdateForm = ({ type, promptDetails, promptId }) => {
             </span>
           </span>
           <input
-            value={post.tag}
-            onChange={(e) => setPost({ ...post, tag: e.target.value })}
+            defaultValue={formState.data.tag}
             type="text"
             placeholder="#Tag"
             required
             className="form_input"
+            name="tag"
           />
         </label>
 

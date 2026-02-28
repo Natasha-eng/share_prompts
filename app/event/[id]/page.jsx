@@ -14,7 +14,7 @@ const Event = async ({ params }) => {
   const events = await fatchAllPrompts();
 
   return (
-    <section className="min-h-[80vh] w-full pt-[100px]">
+    <section className="min-h-[80vh] w-full pt-25">
       <div className="font-serif mt-5 mb-7 text-2xl sm:text-5xl text-center font-bold">
         Events Details
       </div>

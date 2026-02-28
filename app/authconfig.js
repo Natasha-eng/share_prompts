@@ -1,3 +1,5 @@
+import { NextResponse, NextRequest } from "next/server";
+
 export const authConfig = {
   providers: [],
   pages: {
@@ -6,7 +8,6 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request }) {
       const isLoggedIn = auth?.user && Object.keys(auth?.user).length > 0;
-
       const isOnProfile = request.nextUrl.pathname.startsWith("/profile");
       const isOnCreatePrompt =
         request.nextUrl.pathname.startsWith("/create-prompt");
@@ -33,11 +34,11 @@ export const authConfig = {
         if (!isLoggedIn) {
           return true;
         } else {
-          return Response.redirect(new URL("/register", request.nextUrl));
+          return NextResponse.redirect(new URL("/register", request.nextUrl));
         }
       } else if (isOnLogin) {
         if (isLoggedIn) {
-          return Response.redirect(new URL("/profile", request.nextUrl));
+          return NextResponse.redirect(new URL("/profile", request.nextUrl));
         } else {
           return false;
         }

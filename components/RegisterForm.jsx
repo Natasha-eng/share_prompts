@@ -1,4 +1,4 @@
-const RegisterForm = ({ user, submitting, handleSubmit, onChange }) => {
+const RegisterForm = ({ submitting, error, handleSubmit }) => {
   return (
     <section className="min-h-[80vh] pt-25 w-full max-w-full flex-center flex-col">
       <h1 className="head_text text-left">
@@ -6,7 +6,7 @@ const RegisterForm = ({ user, submitting, handleSubmit, onChange }) => {
       </h1>
 
       <form
-        onSubmit={handleSubmit}
+        action={handleSubmit}
         className="mt-10 w-full max-w-md flex flex-col gap-7 glassmorfism"
       >
         <label>
@@ -15,11 +15,10 @@ const RegisterForm = ({ user, submitting, handleSubmit, onChange }) => {
           </span>
 
           <input
-            value={user.username}
-            onChange={(e) => onChange(e)}
             placeholder="username"
             required
             className="form_input "
+            name="username"
           />
         </label>
 
@@ -30,11 +29,10 @@ const RegisterForm = ({ user, submitting, handleSubmit, onChange }) => {
 
           <input
             type="email"
-            value={user.email}
-            onChange={(e) => onChange(e)}
             placeholder="email"
             required
             className="form_input "
+            name="email"
           />
         </label>
 
@@ -43,12 +41,11 @@ const RegisterForm = ({ user, submitting, handleSubmit, onChange }) => {
             Password
           </span>
           <input
-            value={user.password}
-            onChange={(e) => onChange(e)}
             type="password"
             placeholder="password"
             required
             className="form_input"
+            name="password"
           />
         </label>
 
@@ -61,6 +58,9 @@ const RegisterForm = ({ user, submitting, handleSubmit, onChange }) => {
             {submitting ? "Submitting..." : "Log In"}
           </button>
         </div>
+        {error && (
+          <span className="font-sans text-orange-700 font-bold">{error}</span>
+        )}
       </form>
     </section>
   );

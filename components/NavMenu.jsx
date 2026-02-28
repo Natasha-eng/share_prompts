@@ -20,7 +20,9 @@ const NavMenu = ({ user, signOut }) => {
             </Link>
             <button
               type="button"
-              onClick={async () => signOut()}
+              onClick={ () => {
+                 signOut();
+              }}
               className="outline_btn"
             >
               Sign Out
